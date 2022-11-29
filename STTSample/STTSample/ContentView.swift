@@ -23,7 +23,7 @@ struct ContentView: View {
     @State var transcript: String = ""
     
     var body: some View {
-        ScrollView(.vertical) {
+        ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "square.and.arrow.down.on.square")
@@ -105,15 +105,18 @@ struct ContentView: View {
                     .bold()
                     .padding(.bottom, 8)
                 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(spacing: 16) {
                     Text("총 소요시간: \(speechRecognizer.report.responseTime) 초")
+                        .padding(.top, 8)
+                    
+                    Divider()
                     
                     HStack {
                         Text("찾은 문장")
                             .frame(maxWidth: .infinity)
-                        Text("시작시간")
+                        Text("시작 시간")
                             .frame(maxWidth: .infinity)
-                        Text("끝난시간")
+                        Text("끝난 시간")
                             .frame(maxWidth: .infinity)
                     }
                     
@@ -129,8 +132,6 @@ struct ContentView: View {
                     }
                 }
                 .border(.black)
-                
-                Divider()
             }
             .frame(maxWidth: 300, maxHeight: .infinity)
         }
