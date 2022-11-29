@@ -27,7 +27,6 @@ final class SpeechRecognizer: ObservableObject {
         }
     }
     
-    @Published var transcript: String = ""
     @Published var report: Report = .empty
     
     private var request: SFSpeechAudioBufferRecognitionRequest?
@@ -64,7 +63,6 @@ final class SpeechRecognizer: ObservableObject {
         guard let result = result else { return }
         endTime = .init()
         DispatchQueue.main.async {
-            self.transcript = result.bestTranscription.formattedString
             self.report = .init(
                 responseTime: self.endTime!.timeIntervalSince(self.startTime!),
                 transcript: result.bestTranscription.formattedString,

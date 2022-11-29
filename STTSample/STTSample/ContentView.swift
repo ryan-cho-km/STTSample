@@ -20,14 +20,12 @@ struct ContentView: View {
     @State var file: File?
     @State var language: Language = .english
     
-    @State var transcript: String = ""
-    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading) {
                 HStack {
-                    Image(systemName: "square.and.arrow.down.on.square")
-                    Text("파일 가져오기")
+                    Image(systemName: R.image.import)
+                    Text(R.string.importFile)
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
@@ -52,18 +50,17 @@ struct ContentView: View {
                     }
                 
                 HStack {
-                    Text("File : \(file?.name ?? "Empty")")
+                    Text(String(format: R.string.file, file?.name ?? "Empty"))
                         .bold()
                         .frame(height: 30)
                     
                     if file != nil {
-                        Image(systemName: "delete.backward")
+                        Image(systemName: R.image.delete)
                             .renderingMode(.template)
                             .foregroundColor(.gray)
                             .onTapGesture {
                                 file = nil
                                 speechRecognizer.reset()
-                                transcript = ""
                             }
                     }
                     
@@ -79,13 +76,13 @@ struct ContentView: View {
                                 )
                             }
                         }) {
-                            Text("자막 생성")
+                            Text(R.string.createSubTitle)
                         }
                     }
                 }
                 
                 List {
-                    Picker("언어 설정", selection: $language) {
+                    Picker(R.string.setLanguage, selection: $language) {
                         ForEach(Language.allCases) { language in
                             Text(language.rawValue)
                         }
@@ -93,7 +90,7 @@ struct ContentView: View {
                 }
                 .frame(height: 120)
                 
-                Text("Transcript")
+                Text(R.string.transcript)
                     .bold()
                 
                 TextEditor(text: $speechRecognizer.report.transcript)
@@ -101,22 +98,22 @@ struct ContentView: View {
                     .border(.black)
                     .disabled(true)
                 
-                Text("Report")
+                Text(R.string.report)
                     .bold()
                     .padding(.bottom, 8)
                 
                 VStack(spacing: 16) {
-                    Text("총 소요시간: \(speechRecognizer.report.responseTime) 초")
+                    Text(String(format: R.string.totalDuration, speechRecognizer.report.responseTime))
                         .padding(.top, 8)
                     
                     Divider()
                     
                     HStack {
-                        Text("찾은 문장")
+                        Text(R.string.findSentence)
                             .frame(maxWidth: .infinity)
-                        Text("시작 시간")
+                        Text(R.string.startTime)
                             .frame(maxWidth: .infinity)
-                        Text("끝난 시간")
+                        Text(R.string.endTime)
                             .frame(maxWidth: .infinity)
                     }
                     
@@ -124,9 +121,9 @@ struct ContentView: View {
                         HStack {
                             Text(sentence.text)
                                 .frame(maxWidth: .infinity)
-                            Text("\(sentence.startTime) 초")
+                            Text(String(format: R.string.duration, sentence.startTime))
                                 .frame(maxWidth: .infinity)
-                            Text("\(sentence.endTime) 초")
+                            Text(String(format: R.string.duration, sentence.endTime))
                                 .frame(maxWidth: .infinity)
                         }
                     }
@@ -135,6 +132,27 @@ struct ContentView: View {
             }
             .frame(maxWidth: 300, maxHeight: .infinity)
         }
+    }
+}
+
+fileprivate struct R {
+    struct image {
+        static let `import` = "square.and.arrow.down.on.square"
+        static let delete = "delete.backward"
+    }
+    
+    struct string {
+        static let importFile = "파일 가져오기"
+        static let file = "File : %@"
+        static let createSubTitle = "자막 생성"
+        static let setLanguage = "언어 설정"
+        static let transcript = "Transcript"
+        static let report = "Report"
+        static let totalDuration = "총 소요시간: %d초"
+        static let findSentence = "찾은 문장"
+        static let startTime = "시작 시간"
+        static let endTime = "끝난 시간"
+        static let duration = "%d 초"
     }
 }
 
